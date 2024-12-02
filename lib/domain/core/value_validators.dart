@@ -92,10 +92,14 @@ Either<ValueFailure<String>, String> validateCardDate(String input) {
 }
 
 Either<ValueFailure<String>, String> validatePassword(String input) {
-  if (input.length >= 6) {
-    return right(input);
+  if (validateStringNotEmpty(input).isRight()) {
+    if (input.length >= 8) {
+      return right(input);
+    } else {
+      return left(ValueFailure.shortPassword(failedValue: input));
+    }
   } else {
-    return left(ValueFailure.shortPassword(failedValue: input));
+    return left(ValueFailure.empty(failedValue: input));
   }
 }
 

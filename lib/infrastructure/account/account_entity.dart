@@ -1,83 +1,56 @@
 import 'package:e_dashboard/domain/account/account.dart';
-import 'package:e_dashboard/infrastructure/punch_in_out/punch_in_out_entity.dart';
 import 'package:hive/hive.dart';
 part 'account_entity.g.dart';
 
-@HiveType(typeId: 0)
+@HiveType(typeId: 1)
 class AccountEntity extends HiveObject {
-  @HiveField(0)
-  final String? enrollmentID;
   @HiveField(1)
-  final String? firstName;
+  UserEntity? user;
   @HiveField(2)
-  final String? lastName;
-  @HiveField(3)
-  final String? email;
-  @HiveField(4)
-  final String? countryCode;
-  @HiveField(5)
-  final int? phone;
-  @HiveField(6)
-  final String? designation;
+  String? token;
 
-  @HiveField(7)
-  final List<PunchInOutRecord>? punchInOutTime;
-
-  @HiveField(8)
-  final List<double>? predictedData; // New field for storing face data
-  @HiveField(9)
-  final bool? isAdmin; // New field for storing face data
-
-  @HiveField(10)
-  final bool? isPunchIn; // New field for storing face data
-  @HiveField(11)
-  final bool? isPunchInFromEverywhere; // New field for storing face data
-  AccountEntity(
-    this.enrollmentID,
-    this.firstName,
-    this.lastName,
-    this.email,
-    this.countryCode,
-    this.phone,
-    this.designation,
-    this.punchInOutTime,
-    this.predictedData,
-    this.isAdmin,
-    this.isPunchIn,
-    this.isPunchInFromEverywhere,
-  );
+  AccountEntity({
+    required this.user,
+    required this.token,
+  });
 
   Account toDomain() {
     return Account(
-      enrollmentID: enrollmentID,
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      countryCode: countryCode,
-      phone: phone,
-      designation: designation,
-      punchInOutTime: punchInOutTime,
-      predictedData: predictedData,
-      isAdmin: isAdmin,
-      isPunchIn: isPunchIn,
-      isPunchInFromEverywhere: isPunchInFromEverywhere,
+      user: user?.toDomain(),
+      token: token,
     );
   }
 
   factory AccountEntity.fromDomain(Account account) {
     return AccountEntity(
-      account.enrollmentID,
-      account.firstName,
-      account.lastName,
-      account.email,
-      account.countryCode,
-      account.phone,
-      account.designation,
-      account.punchInOutTime,
-      account.predictedData,
-      account.isAdmin,
-      account.isPunchIn,
-      account.isPunchInFromEverywhere,
+        user: UserEntity.fromDomain(account.user!), token: account.token);
+  }
+}
+
+@HiveType(typeId: 2)
+class UserEntity extends HiveObject {
+  @HiveField(1)
+  String? email;
+  @HiveField(2)
+  String? id;
+  @HiveField(3)
+  int? v;
+
+  UserEntity({
+    required this.email,
+    required this.id,
+    required this.v,
+  });
+
+  UserDetail toDomain() {
+    return UserDetail(
+      email: email,
+      id: id,
+      v: v,
     );
+  }
+
+  factory UserEntity.fromDomain(UserDetail account) {
+    return UserEntity(email: account.email, id: account.id, v: account.v);
   }
 }

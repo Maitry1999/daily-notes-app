@@ -18,7 +18,7 @@ class CommonResponse<T> {
   });
 
   CommonResponse.fromJson(Map<String, dynamic> json) {
-    status = json['success'];
+    status = json['status'];
     dioMessage = json['message'];
 
     data = json['data'];

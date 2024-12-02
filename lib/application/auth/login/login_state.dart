@@ -4,7 +4,8 @@ part of 'login_bloc.dart';
 class LoginState with _$LoginState {
   factory LoginState({
     required bool isSubmitting,
-    required Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption,
+    required bool showErrorMessages,
+    required Option<Either<AuthFailure, String>> authFailureOrSuccessOption,
     required EmailAddress emailAddress,
     required Password password,
   }) = _LoginState;
@@ -13,5 +14,6 @@ class LoginState with _$LoginState {
         authFailureOrSuccessOption: none(),
         emailAddress: EmailAddress(''),
         password: Password(''),
+        showErrorMessages: false,
       );
 }

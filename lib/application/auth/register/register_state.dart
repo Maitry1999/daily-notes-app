@@ -4,7 +4,8 @@ part of 'register_bloc.dart';
 class RegisterState with _$RegisterState {
   const factory RegisterState({
     required bool isSubmitting,
-    required Option<Either<AuthFailure, Unit>> authFailureOrSuccessOption,
+    required bool showErrorMessages,
+    required Option<Either<AuthFailure, String>> authFailureOrSuccessOption,
     required EmailAddress emailAddress,
     required Password password,
     required Password confirmPassword,
@@ -17,5 +18,6 @@ class RegisterState with _$RegisterState {
         password: Password(''),
         confirmPassword: Password(''),
         userName: Username(''),
+        showErrorMessages: false,
       );
 }
