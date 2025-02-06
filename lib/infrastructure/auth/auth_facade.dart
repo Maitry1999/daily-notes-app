@@ -34,12 +34,12 @@ class AuthFacade implements IAuthFacade {
   @override
   Future<Either<AuthFailure, String>> logout() async {
     try {
-      return apiService.postMethod(ApiConstants.login,
-          {"device_id": ''}).then((value) async {
+      return apiService.postMethod(ApiConstants.login, {"device_id": ''}).then(
+          (value) async {
         Hive.box(BoxNames.settingsBox).clear();
         Hive.box<AccountEntity>(BoxNames.currentUser).clear();
         await Hive.box(BoxNames.settingsBox).put(BoxKeys.isUserShowIntro, true);
-        return right(value.dioMessage ?? "");
+        return right(value?.dioMessage ?? "");
       });
       // await Future.wait([
 
@@ -88,6 +88,9 @@ class AuthFacade implements IAuthFacade {
         },
       );
 
+      if (response == null) {
+        return left(AuthFailure.serverError());
+      }
       final account = CurrentUserDTO.fromJson(response.data).toDomain();
       setUserToken(account.token ?? "");
       _setUserData(account);
@@ -124,11 +127,14 @@ class AuthFacade implements IAuthFacade {
         ApiConstants.register,
         mapData,
       );
-
-      final account = CurrentUserDTO.fromJson(response.data).toDomain();
-      setUserToken(account.token ?? "");
-      _setUserData(account);
-      return right(response.dioMessage ?? "");
+      if (response == null) {
+        return left(AuthFailure.serverError());
+      } else {
+        // final account = CurrentUserDTO.fromJson(response.data).toDomain();
+        // setUserToken(account.token ?? "");
+        // _setUserData(account);
+        return right(response.dioMessage ?? "");
+      }
     } on DioException catch (err) {
       if (err.response != null) {
         var commonRespose = CommonResponse.fromJson(err.response?.data);

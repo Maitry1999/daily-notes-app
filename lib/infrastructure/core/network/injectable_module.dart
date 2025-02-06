@@ -65,7 +65,7 @@ class ApiService {
     return dio;
   }
 
-  Future<CommonResponse> postMethod(String path, dynamic data,
+  Future<CommonResponse?> postMethod(String path, dynamic data,
       {bool isMultipart = false,
       FormData? formData,
       Map<String, dynamic>? queryParameters}) async {
@@ -76,8 +76,11 @@ class ApiService {
       data: isMultipart ? formData : data,
       queryParameters: queryParameters,
     );
-
-    return CommonResponse.fromJson(response.data);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return CommonResponse.fromJson(response.data);
+    } else {
+      return null;
+    }
   }
 
   Future<CommonResponse?> getMethod(String path,
@@ -89,7 +92,11 @@ class ApiService {
       queryParameters: queryParameters,
     );
 
-    return CommonResponse.fromJson(response.data);
+    if (response.statusCode == 200) {
+      return CommonResponse.fromJson(response.data);
+    } else {
+      return null;
+    }
   }
 
   Future<CommonResponse?> putMethod(String path,
@@ -104,8 +111,11 @@ class ApiService {
       data: isMultipart ? formData : data,
       queryParameters: queryParameters,
     );
-
-    return CommonResponse.fromJson(response.data);
+    if (response.statusCode == 200) {
+      return CommonResponse.fromJson(response.data);
+    } else {
+      return null;
+    }
   }
 
   Future<CommonResponse?> deleteMethod(
@@ -121,6 +131,10 @@ class ApiService {
       queryParameters: queryParameters,
     );
 
-    return CommonResponse.fromJson(response.data);
+    if (response.statusCode == 200) {
+      return CommonResponse.fromJson(response.data);
+    } else {
+      return null;
+    }
   }
 }

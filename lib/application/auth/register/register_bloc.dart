@@ -20,15 +20,18 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           emailChanged: (e) async => emit(
             state.copyWith(
               emailAddress: EmailAddress(e.emailStr),
+              authFailureOrSuccessOption: none(),
             ),
           ),
           passwordChanged: (e) async => emit(
             state.copyWith(
+              authFailureOrSuccessOption: none(),
               password: Password(e.passwordStr),
             ),
           ),
           confirmPasswordChanged: (e) async => emit(
             state.copyWith(
+              authFailureOrSuccessOption: none(),
               confirmPassword: Password(e.passwordStr),
             ),
           ),
